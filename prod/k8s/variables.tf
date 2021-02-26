@@ -20,9 +20,8 @@ variable "hcloud_token" {
   default = null
 }
 
-variable "hcloud_ssh_keys" {
-  type    = list(string)
-  default = [""]
+variable "hcloud_ssh_key_name" {
+  type = string
 }
 
 variable "hcloud_location" {

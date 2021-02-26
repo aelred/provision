@@ -2,13 +2,18 @@ module "provider" {
   source = "github.com/hobby-kube/provisioning//provider/hcloud?ref=1168754213d360fd289c627a494015dff24ac692"
 
   token           = var.hcloud_token
-  ssh_keys        = var.hcloud_ssh_keys
+  ssh_keys        = [hcloud_ssh_key.key.name]
   location        = var.hcloud_location
   type            = var.hcloud_type
   image           = var.hcloud_image
   hosts           = var.node_count
   hostname_format = var.hostname_format
   apt_packages = ["ceph-common"]
+}
+
+resource hcloud_ssh_key key {
+  name = var.hcloud_ssh_key_name
+  public_key = file("~/.ssh/id_rsa.pub")
 }
 
 # module "provider" {

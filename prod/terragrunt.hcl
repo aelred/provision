@@ -1,5 +1,6 @@
 inputs = {
   domain = "ael.red"
+  hcloud_ssh_key_name = "aelred717@gmail.com"
 }
 
 generate provider {
@@ -28,6 +29,10 @@ terraform {
       source = "fluxcd/flux"
       version = "~> 0.0.12"
     }
+    hcloud = {
+      source = "hetznercloud/hcloud"
+      version = "~> 1.24.1"
+    }
   }
 }
 
@@ -44,5 +49,7 @@ provider kubectl {}
 provider kubernetes {
   config_path = "~/.kube/config"
 }
+
+provider hcloud {}
 EOF
 }
