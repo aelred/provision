@@ -101,17 +101,6 @@ resource kubernetes_secret github_token {
   }
 }
 
-resource kubernetes_secret webhook_token {
-  metadata {
-    name = "github-manifests-webhook-token"
-    namespace = var.flux_namespace
-  }
-
-  data = {
-    token = random_password.webhook_token.result
-  }
-}
-
 # GitHub
 resource github_repository main {
   name = var.manifests_repository
@@ -159,21 +148,11 @@ resource github_repository_file resource {
   branch = var.manifests_main_branch
 }
 
-resource github_repository_webhook webhook {
-  repository = github_repository.main.name
-  events     = ["push"]
-  configuration {
-    url = "https://flux-webhook.ael.red/hook/${local.webhook_sha}"
-    secret = random_password.webhook_token.result
-  }
-}
-
-resource "random_password" "webhook_token" {
-  length = 40
-}
-
-locals {
-  webhook_sha = sha256("${random_password.webhook_token.result}${var.flux_namespace}${var.flux_namespace}")
+module github_webhook {
+  source = "../../modules/flux_github_webhook"
+  name   = "manifests"
+  receiver = var.flux_namespace
+  repository = "manifests"
 }
 
 data github_user me {
