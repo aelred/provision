@@ -1,11 +1,14 @@
 locals {
-  known_hosts = "github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=="
+  # taken directly from the registry: https://registry.terraform.io/providers/fluxcd/flux/latest/docs/guides/github
+  # don't totally understand what it is, but it's not secret and it's got nothing to do with my machine
+  known_hosts = "github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg="
   github_owner = data.github_user.me.login
 }
 
+
 resource tls_private_key main {
-  algorithm = "RSA"
-  rsa_bits  = 4096
+  algorithm   = "ECDSA"
+  ecdsa_curve = "P256"
 }
 
 data flux_install main {
@@ -24,6 +27,7 @@ data flux_sync main {
   target_path = var.manifests_target_path
   url         = "ssh://git@github.com/${local.github_owner}/${var.manifests_repository}.git"
   branch      = var.manifests_main_branch
+  namespace   = var.flux_namespace
 }
 
 resource kubernetes_namespace flux_system {
@@ -76,13 +80,35 @@ resource kubernetes_secret main {
 
   metadata {
     name      = data.flux_sync.main.name
-    namespace = data.flux_sync.main.namespace
+    namespace = var.flux_namespace
   }
 
   data = {
     identity       = tls_private_key.main.private_key_pem
     "identity.pub" = tls_private_key.main.public_key_pem
     known_hosts    = local.known_hosts
+  }
+}
+
+resource kubernetes_secret github_token {
+  metadata {
+    name = "github-token"
+    namespace = var.flux_namespace
+  }
+
+  data = {
+    token = var.github_token
+  }
+}
+
+resource kubernetes_secret webhook_token {
+  metadata {
+    name = "github-manifests-webhook-token"
+    namespace = var.flux_namespace
+  }
+
+  data = {
+    token = random_password.webhook_token.result
   }
 }
 
@@ -131,6 +157,23 @@ resource github_repository_file resource {
   content = each.value
   file = each.key
   branch = var.manifests_main_branch
+}
+
+resource github_repository_webhook webhook {
+  repository = github_repository.main.name
+  events     = ["push"]
+  configuration {
+    url = "https://flux-webhook.ael.red/hook/${local.webhook_sha}"
+    secret = random_password.webhook_token.result
+  }
+}
+
+resource "random_password" "webhook_token" {
+  length = 40
+}
+
+locals {
+  webhook_sha = sha256("${random_password.webhook_token.result}${var.flux_namespace}${var.flux_namespace}")
 }
 
 data github_user me {

@@ -1,5 +1,5 @@
 module "provider" {
-  source = "github.com/hobby-kube/provisioning//provider/hcloud?ref=1168754213d360fd289c627a494015dff24ac692"
+  source = "github.com/hobby-kube/provisioning//provider/hcloud?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 
   token           = var.hcloud_token
   ssh_keys        = [hcloud_ssh_key.key.name]
@@ -17,7 +17,7 @@ resource hcloud_ssh_key key {
 }
 
 # module "provider" {
-#   source = "github.com/hobby-kube/provisioning//provider/scaleway?ref=1168754213d360fd289c627a494015dff24ac692"
+#   source = "github.com/hobby-kube/provisioning//provider/scaleway?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 #
 #   organization_id = var.scaleway_organization_id
 #   access_key      = var.scaleway_access_key
@@ -30,7 +30,7 @@ resource hcloud_ssh_key key {
 # }
 
 # module "provider" {
-#   source = "github.com/hobby-kube/provisioning//provider/digitalocean?ref=1168754213d360fd289c627a494015dff24ac692"
+#   source = "github.com/hobby-kube/provisioning//provider/digitalocean?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 #
 #   token           = var.digitalocean_token
 #   ssh_keys        = var.digitalocean_ssh_keys
@@ -42,7 +42,7 @@ resource hcloud_ssh_key key {
 # }
 
 # module "provider" {
-#   source = "github.com/hobby-kube/provisioning//provider/packet?ref=1168754213d360fd289c627a494015dff24ac692"
+#   source = "github.com/hobby-kube/provisioning//provider/packet?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 #
 #   auth_token       = var.packet_auth_token
 #   project_id       = var.packet_project_id
@@ -55,7 +55,7 @@ resource hcloud_ssh_key key {
 # }
 
 # module "provider" {
-#   source = "github.com/hobby-kube/provisioning//provider/vsphere?ref=1168754213d360fd289c627a494015dff24ac692"
+#   source = "github.com/hobby-kube/provisioning//provider/vsphere?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 #
 #   hosts                   = var.node_count
 #   hostname_format         = var.hostname_format
@@ -73,14 +73,14 @@ resource hcloud_ssh_key key {
 # }
 
 module "swap" {
-  source = "github.com/hobby-kube/provisioning//service/swap?ref=1168754213d360fd289c627a494015dff24ac692"
+  source = "github.com/hobby-kube/provisioning//service/swap?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 
   node_count  = var.node_count
   connections = module.provider.public_ips
 }
 
 //module "dns" {
-//  source = "github.com/hobby-kube/provisioning//dns/cloudflare?ref=1168754213d360fd289c627a494015dff24ac692"
+//  source = "github.com/hobby-kube/provisioning//dns/cloudflare?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 //
 //  node_count = var.node_count
 //  email      = var.cloudflare_email
@@ -103,7 +103,7 @@ module "dns" {
 }
 
 # module "dns" {
-#   source = "github.com/hobby-kube/provisioning//dns/google?ref=1168754213d360fd289c627a494015dff24ac692"
+#   source = "github.com/hobby-kube/provisioning//dns/google?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 #
 #   node_count   = var.node_count
 #   project      = var.google_project
@@ -116,7 +116,7 @@ module "dns" {
 # }
 
 # module "dns" {
-#   source     = "github.com/hobby-kube/provisioning//dns/digitalocean?ref=1168754213d360fd289c627a494015dff24ac692"
+#   source     = "github.com/hobby-kube/provisioning//dns/digitalocean?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 #
 #   node_count = var.node_count
 #   token      = var.digitalocean_token
@@ -126,7 +126,7 @@ module "dns" {
 # }
 
 module "wireguard" {
-  source = "github.com/hobby-kube/provisioning//security/wireguard?ref=1168754213d360fd289c627a494015dff24ac692"
+  source = "github.com/hobby-kube/provisioning//security/wireguard?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 
   node_count   = var.node_count
   connections  = module.provider.public_ips
@@ -136,7 +136,7 @@ module "wireguard" {
 }
 
 module "firewall" {
-  source = "github.com/hobby-kube/provisioning//security/ufw?ref=1168754213d360fd289c627a494015dff24ac692"
+  source = "github.com/hobby-kube/provisioning//security/ufw?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 
   node_count           = var.node_count
   connections          = module.provider.public_ips
@@ -147,7 +147,7 @@ module "firewall" {
 }
 
 module "etcd" {
-  source = "github.com/hobby-kube/provisioning//service/etcd?ref=1168754213d360fd289c627a494015dff24ac692"
+  source = "github.com/hobby-kube/provisioning//service/etcd?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 
   node_count  = var.etcd_node_count
   connections = module.provider.public_ips
@@ -157,7 +157,7 @@ module "etcd" {
 }
 
 module "kubernetes" {
-  source = "github.com/hobby-kube/provisioning//service/kubernetes?ref=1168754213d360fd289c627a494015dff24ac692"
+  source = "github.com/hobby-kube/provisioning//service/kubernetes?ref=800d5d5031245cf31a803a147eaa40a0de0573f1"
 
   node_count     = var.node_count
   connections    = module.provider.public_ips
@@ -165,4 +165,18 @@ module "kubernetes" {
   vpn_interface  = module.wireguard.vpn_interface
   vpn_ips        = module.wireguard.vpn_ips
   etcd_endpoints = module.etcd.endpoints
+}
+
+// Volume used by rook in k8s to provide block storage
+resource hcloud_volume rook_storage {
+  name = "rook_storage_${count.index + 1}"
+  size = 10
+  server_id = data.hcloud_server.hosts[count.index].id
+  automount = false
+  count = var.node_count
+}
+
+data hcloud_server hosts {
+  name = module.provider.hostnames[count.index]
+  count = var.node_count
 }

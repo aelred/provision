@@ -1,6 +1,7 @@
 inputs = {
   domain = "ael.red"
   hcloud_ssh_key_name = "aelred717@gmail.com"
+  flux_namespace = "flux-system"
 }
 
 generate provider {
@@ -15,7 +16,7 @@ terraform {
     }
     github = {
       source = "integrations/github"
-      version = "~> 4.4.0"
+      version = "~> 4.19.1"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -27,7 +28,7 @@ terraform {
     }
     flux = {
       source = "fluxcd/flux"
-      version = "~> 0.0.12"
+      version = "~> 0.8.1"
     }
     hcloud = {
       source = "hetznercloud/hcloud"

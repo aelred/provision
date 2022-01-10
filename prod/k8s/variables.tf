@@ -29,7 +29,7 @@ variable "hcloud_location" {
 }
 
 variable "hcloud_type" {
-  default = "cx11"
+  default = "cpx11"
 }
 
 variable "hcloud_image" {
