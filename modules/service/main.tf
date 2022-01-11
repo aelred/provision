@@ -28,6 +28,21 @@ locals {
   image = coalesce(var.image, var.name)
 }
 
+moved {
+  from = github_repository_webhook.webhook
+  to = module.github_webhook.github_repository_webhook.webhook
+}
+
+moved {
+  from = kubernetes_secret.webhook_token
+  to = module.github_webhook.kubernetes_secret.webhook_token
+}
+
+moved {
+  from = random_password.webhook_token
+  to = module.github_webhook.random_password.webhook_token
+}
+
 output go_here_and_add_webhook_url {
   value = "https://hub.docker.com/repository/docker/aelred/${local.image}/webhooks"
 }
