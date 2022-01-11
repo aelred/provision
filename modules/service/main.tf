@@ -3,6 +3,14 @@ module github_webhook {
   name   = var.name
   receiver = "${var.name}-github"
   repository = var.name
+  flux_namespace = var.flux_namespace
+}
+
+module dockerhub_webhook {
+  source = "../flux_webhook"
+  name = "dockerhub-${var.name}"
+  receiver = "${var.name}-dockerhub"
+  flux_namespace = var.flux_namespace
 }
 
 resource github_repository_file kustomization {
@@ -18,4 +26,12 @@ resource github_repository_file kustomization {
 
 locals {
   image = coalesce(var.image, var.name)
+}
+
+output go_here_and_add_webhook_url {
+  value = "https://hub.docker.com/repository/docker/aelred/${var.image}/webhooks"
+}
+
+output dockerhub_webhook_url {
+  value = module.dockerhub_webhook.webhook_url
 }

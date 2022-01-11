@@ -33,6 +33,14 @@ provider "registry.terraform.io/hashicorp/kubernetes" {
   ]
 }
 
+provider "registry.terraform.io/hetznercloud/hcloud" {
+  version     = "1.24.1"
+  constraints = "~> 1.24.1"
+  hashes = [
+    "h1:QAmFuG6aSGiAkvLHDgDt2xBia3Uc3r0eVVR8J21umVY=",
+  ]
+}
+
 provider "registry.terraform.io/integrations/github" {
   version     = "4.4.0"
   constraints = "~> 4.4.0"
