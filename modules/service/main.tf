@@ -29,7 +29,7 @@ locals {
 }
 
 output go_here_and_add_webhook_url {
-  value = "https://hub.docker.com/repository/docker/aelred/${var.image}/webhooks"
+  value = "https://hub.docker.com/repository/docker/aelred/${local.image}/webhooks"
 }
 
 output dockerhub_webhook_url {
