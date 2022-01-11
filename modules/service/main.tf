@@ -43,8 +43,8 @@ moved {
   to = module.github_webhook.random_password.webhook_token
 }
 
-output go_here_and_add_webhook_url {
-  value = "https://hub.docker.com/repository/docker/aelred/${local.image}/webhooks"
+output next_steps {
+  value = "Go to https://hub.docker.com/repository/docker/aelred/${local.image}/webhooks and add dockerhub_webhook_url"
 }
 
 output dockerhub_webhook_url {
