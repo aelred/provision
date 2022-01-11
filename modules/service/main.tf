@@ -49,4 +49,5 @@ output next_steps {
 
 output dockerhub_webhook_url {
   value = module.dockerhub_webhook.webhook_url
+  sensitive = false
 }

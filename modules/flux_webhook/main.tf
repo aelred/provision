@@ -19,6 +19,7 @@ locals {
 
 output webhook_url {
   value = "https://flux-webhook.ael.red/hook/${local.webhook_sha}"
+  sensitive = false
 }
 
 output webhook_token {
