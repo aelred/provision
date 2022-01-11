@@ -14,12 +14,11 @@ resource "random_password" "webhook_token" {
 }
 
 locals {
-  webhook_sha = sha256("${random_password.webhook_token.result}${var.receiver}${var.flux_namespace}")
+  webhook_sha = nonsensitive(sha256("${random_password.webhook_token.result}${var.receiver}${var.flux_namespace}"))
 }
 
 output webhook_url {
   value = "https://flux-webhook.ael.red/hook/${local.webhook_sha}"
-  sensitive = false
 }
 
 output webhook_token {
