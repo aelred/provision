@@ -11,8 +11,6 @@ services:
       - site_owner
       - firefly_app_key
       - firefly_db_password
-    networks:
-      - firefly_iii
     ports:
       - 80:8080
     depends_on:
@@ -36,8 +34,6 @@ services:
     env_file: .db.env
     secrets:
       - firefly_db_password
-    networks:
-      - firefly_iii
     volumes:
       - firefly_iii_db:/var/lib/mysql
   cron:
@@ -47,17 +43,11 @@ services:
     #
     image: alpine
     command: sh -c "echo \"0 3 * * * wget -qO- http://app:8080/api/v1/cron/REPLACEME\" | crontab - && crond -f -L /dev/stdout"
-    networks:
-      - firefly_iii
 
 volumes:
   firefly_iii_upload:
   firefly_iii_db:
 
-
-networks:
-  firefly_iii:
-    driver: bridge
 
 secrets:
   site_owner:
