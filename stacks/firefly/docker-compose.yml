@@ -11,6 +11,8 @@ services:
       - site_owner
       - firefly_app_key
       - firefly_db_password
+    networks:
+      - traefik-public
     depends_on:
       - db
     deploy:
@@ -46,6 +48,10 @@ volumes:
   firefly_iii_upload:
   firefly_iii_db:
 
+
+networks:
+  traefik-public:
+    external: true
 
 secrets:
   site_owner:
