@@ -4,7 +4,6 @@ services:
   app:
     image: fireflyiii/core:latest
     hostname: app
-    restart: always
     volumes:
       - firefly_iii_upload:/var/www/html/storage/upload
     env_file: .env
@@ -34,7 +33,6 @@ services:
   db:
     image: mariadb
     hostname: db
-    restart: always
     env_file: .db.env
     secrets:
       - firefly_db_password
@@ -48,7 +46,6 @@ services:
     # The STATIC_CRON_TOKEN must be *exactly* 32 characters long
     #
     image: alpine
-    restart: always
     command: sh -c "echo \"0 3 * * * wget -qO- http://app:8080/api/v1/cron/REPLACEME\" | crontab - && crond -f -L /dev/stdout"
     networks:
       - firefly_iii
