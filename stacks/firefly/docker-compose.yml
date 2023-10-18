@@ -58,3 +58,11 @@ volumes:
 networks:
   firefly_iii:
     driver: bridge
+
+secrets:
+  site_owner:
+    external: true
+  firefly_db_password:
+    external: true
+  firefly_app_key:
+    external: true
