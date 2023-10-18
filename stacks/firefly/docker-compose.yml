@@ -11,8 +11,6 @@ services:
       - site_owner
       - firefly_app_key
       - firefly_db_password
-    ports:
-      - 80:8080
     depends_on:
       - db
     deploy:
