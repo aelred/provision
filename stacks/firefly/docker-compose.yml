@@ -28,7 +28,7 @@ services:
         - traefik.http.routers.firefly-https.entrypoints=https
         - traefik.http.routers.firefly-https.tls=true
         - traefik.http.routers.firefly-https.tls.certresolver=le
-        - traefik.http.services.firefly.loadbalancer.server.port=80
+        - traefik.http.services.firefly.loadbalancer.server.port=8080
   db:
     image: mariadb
     hostname: db
