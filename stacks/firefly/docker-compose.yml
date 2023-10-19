@@ -13,6 +13,7 @@ services:
       - firefly_db_password
     networks:
       - traefik-public
+      - firefly_iii
     depends_on:
       - db
     deploy:
@@ -34,6 +35,8 @@ services:
     env_file: .db.env
     secrets:
       - firefly_db_password
+    networks:
+      - firefly_iii
     volumes:
       - firefly_iii_db:/var/lib/mysql
   cron:
@@ -52,6 +55,8 @@ volumes:
 networks:
   traefik-public:
     external: true
+  firefly_iii:
+    driver: overlay
 
 secrets:
   site_owner:
