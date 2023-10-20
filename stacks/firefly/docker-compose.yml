@@ -47,6 +47,7 @@ services:
     restart: always
     container_name: firefly_iii_importer
     networks:
+      - traefik-public
       - firefly_iii
     depends_on:
       - app
