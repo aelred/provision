@@ -57,14 +57,14 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.firefly-http.rule=Host(`${IMPORTER_DOMAIN?Variable not set}`)
-        - traefik.http.routers.firefly-http.entrypoints=http
-        - traefik.http.routers.firefly-http.middlewares=https-redirect
-        - traefik.http.routers.firefly-https.rule=Host(`${IMPORTER_DOMAIN?Variable not set}`)
-        - traefik.http.routers.firefly-https.entrypoints=https
-        - traefik.http.routers.firefly-https.tls=true
+        - traefik.http.routers.firefly-importer-http.rule=Host(`${IMPORTER_DOMAIN?Variable not set}`)
+        - traefik.http.routers.firefly-importer-http.entrypoints=http
+        - traefik.http.routers.firefly-importer-http.middlewares=https-redirect
+        - traefik.http.routers.firefly-importer-https.rule=Host(`${IMPORTER_DOMAIN?Variable not set}`)
+        - traefik.http.routers.firefly-importer-https.entrypoints=https
+        - traefik.http.routers.firefly-importer-https.tls=true
         - traefik.http.routers.firefly-https.tls.certresolver=le
-        - traefik.http.services.firefly.loadbalancer.server.port=8080
+        - traefik.http.services.firefly-importer.loadbalancer.server.port=8080
 
   cron:
     #
