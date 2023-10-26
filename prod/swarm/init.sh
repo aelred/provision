@@ -9,4 +9,4 @@ if [ "$(docker info --format '{{.Swarm.LocalNodeState}}')" == "inactive" ]; then
     docker swarm init
 fi
 
-docker network create --driver=overlay traefik-public
+[ "$(docker network ls | grep traefik-public)" ] || docker network create --driver=overlay traefik-public
