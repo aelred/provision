@@ -7,4 +7,10 @@ package_upgrade: true
 fqdn: ${fully_qualified_domain_name}
 
 runcmd:
-  - curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--tls-san ${fully_qualified_domain_name}" sh -
+  # Install k3s, disabling local storage because we want to use our own storage system using remote volumes
+  - curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--tls-san ${fully_qualified_domain_name} --disable local-storage" sh -
+  # Mount Hetzner volume at a known path (so whatever storage system we use knows the path)
+  - mkfs.ext4 -F ${linux_device}
+  - mkdir /mnt/${mount_dir_name}
+  - mount -o discard,defaults ${linux_device} /mnt/${mount_dir_name}
+  - echo '${linux_device} /mnt/${mount_dir_name} ext4 discard,nofail,defaults 0 0' >> /etc/fstab
