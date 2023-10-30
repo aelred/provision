@@ -1,0 +1,10 @@
+#cloud-config
+# ^ NECESSARY to interpret this as a cloud-init file
+
+package_update: true
+package_upgrade: true
+
+fqdn: ${fully_qualified_domain_name}
+
+runcmd:
+  - curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--tls-san ${fully_qualified_domain_name}" sh -

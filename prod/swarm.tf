@@ -14,9 +14,17 @@ resource "hcloud_server" "drone" {
   rebuild_protection = true
 }
 
-resource "aws_route53_record" "wildcard" {
+resource "aws_route53_record" "traefik" {
   zone_id = aws_route53_zone.zone.id
-  name    = "*"
+  name    = "traefik.${var.domain}"
+  type    = "A"
+  ttl     = "300"
+  records = [hcloud_server.drone.ipv4_address]
+}
+
+resource "aws_route53_record" "portainer" {
+  zone_id = aws_route53_zone.zone.id
+  name    = "portainer.${var.domain}"
   type    = "A"
   ttl     = "300"
   records = [hcloud_server.drone.ipv4_address]
