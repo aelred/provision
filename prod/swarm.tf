@@ -2,7 +2,7 @@ resource "hcloud_server" "drone" {
   name        = "drone"
   server_type = "cpx11"
   image       = "ubuntu-22.04"
-  user_data = templatefile("cloud-init.yml", { fully_qualified_domain_name = "drone.${var.domain}" })
+  user_data = templatefile("swarm/cloud-init.yml", { fully_qualified_domain_name = "drone.${var.domain}" })
   ssh_keys = [hcloud_ssh_key.key.id]
 
   # Backups and delete protection cus "important" data is persisted in this server (e.g. certificates, Tetris highscores...)
