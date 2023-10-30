@@ -2,8 +2,8 @@ resource "hcloud_server" "drone" {
   name        = "drone"
   server_type = "cpx11"
   image       = "ubuntu-22.04"
-  user_data = templatefile("swarm/cloud-init.yml", { fully_qualified_domain_name = "drone.${var.domain}" })
-  ssh_keys = [hcloud_ssh_key.key.id]
+  user_data   = templatefile("swarm/cloud-init.yml", { fully_qualified_domain_name = "drone.${var.domain}" })
+  ssh_keys    = [hcloud_ssh_key.key.id]
 
   # Backups and delete protection cus "important" data is persisted in this server (e.g. certificates, Tetris highscores...)
   # Another option is to add volumes and connect them to Docker Swarm using CSI:
@@ -12,6 +12,14 @@ resource "hcloud_server" "drone" {
   backups            = true
   delete_protection  = true
   rebuild_protection = true
+}
+
+resource "aws_route53_record" "drone" {
+  zone_id = aws_route53_zone.zone.id
+  name    = "drone.${var.domain}"
+  type    = "A"
+  ttl     = "300"
+  records = [hcloud_server.drone.ipv4_address]
 }
 
 resource "aws_route53_record" "traefik" {
