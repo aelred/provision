@@ -6,6 +6,11 @@ package_upgrade: true
 
 fqdn: ${fully_qualified_domain_name}
 
+packages:
+  # Longhorn requirements
+  - open-iscsi
+  - nfs-common
+
 runcmd:
   # Install k3s, disabling local storage because we want to use our own storage system using remote volumes
   - curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--tls-san ${fully_qualified_domain_name} --disable local-storage" sh -

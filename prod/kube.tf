@@ -1,6 +1,6 @@
 resource "hcloud_server" "kube" {
   name        = "kube"
-  server_type = "cpx11"
+  server_type = "cx21"
   image       = "ubuntu-22.04"
   user_data = templatefile("kube/cloud-init.yml", {
     fully_qualified_domain_name = "kube.${var.domain}"
