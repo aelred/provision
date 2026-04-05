@@ -29,3 +29,43 @@ resource "aws_route53_record" "wildcard" {
   ttl     = "300"
   records = [hcloud_server.kube.ipv4_address]
 }
+
+resource "hcloud_firewall" "kube" {
+  name = "kube-firewall"
+
+  # SSH
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "22"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  }
+
+  # HTTP
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "80"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  }
+
+  # HTTPS
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "443"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  }
+
+  # k3s
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "6443"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  }
+
+  apply_to {
+    server = hcloud_server.kube.id
+  }
+}
